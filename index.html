@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Turkey to Toast | Holiday Deals Tracker</title>
+  <meta name="description" content="A live tracker of holiday deals from Thanksgiving and Black Friday through Christmas and New Year, online and in Boston, with student picks.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238a1c2b'/%3E%3Ctext x='32' y='43' font-size='30' text-anchor='middle' fill='%23f4d58d' font-family='Georgia'%3ET%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Holiday deals tracker · Online + Boston</p>
+      <h1>Turkey <span>to</span> Toast</h1>
+      <p class="tagline">Every deal worth a click, from the Thanksgiving turkey to the New Year's toast. Picked for students, with Boston for in-person shopping.</p>
+      <div class="countdown" id="countdown" aria-live="polite"></div>
+    </div>
+  </header>
+
+  <nav class="timeline" aria-label="Sale calendar">
+    <ol class="wrap" id="timeline"></ol>
+  </nav>
+
+  <main class="wrap">
+    <section class="controls" aria-label="Filters">
+      <label class="search">
+        <span class="sr">Search deals</span>
+        <input id="q" type="search" placeholder="Search laptops, coats, PS5, Boston…" autocomplete="off">
+      </label>
+      <div class="chips" id="cats" role="group" aria-label="Category"></div>
+      <div class="row">
+        <div class="seg" id="where" role="group" aria-label="Where">
+          <button data-v="all" class="on">All</button>
+          <button data-v="online">Online</button>
+          <button data-v="boston">Boston</button>
+        </div>
+        <div class="seg" id="season" role="group" aria-label="Season">
+          <button data-v="all" class="on">All season</button>
+          <button data-v="thanksgiving">Black Friday</button>
+          <button data-v="cyber">Cyber Week</button>
+          <button data-v="christmas">Christmas</button>
+          <button data-v="newyear">New Year</button>
+        </div>
+        <label class="toggle"><input type="checkbox" id="student"> Student picks only</label>
+        <label class="toggle"><input type="checkbox" id="hideEnded" checked> Hide ended</label>
+        <label class="sort">Sort
+          <select id="sort">
+            <option value="ending">Ending soonest</option>
+            <option value="store">Store A to Z</option>
+            <option value="category">Category</option>
+          </select>
+        </label>
+      </div>
+      <p class="count" id="count"></p>
+    </section>
+
+    <section class="grid" id="grid" aria-label="Deals"></section>
+    <p class="empty" id="empty" hidden>No deals match those filters. Try clearing the search or turning off "Hide ended".</p>
+  </main>
+
+  <footer class="wrap foot">
+    <p>Last updated <span id="updated"></span>. Prices and dates come from retailers and deal sites and change fast, so check the store before you buy. Status badges update on their own as dates pass.</p>
+    <p>Not affiliated with any retailer. No affiliate links. <a href="https://github.com/AravindB98/turkey-to-toast">Add a deal on GitHub</a>.</p>
+  </footer>
+
+  <script src="assets/deals.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
