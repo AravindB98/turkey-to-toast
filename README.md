@@ -10,6 +10,9 @@ Turkey to Toast collects the season's best deals in one place: online sales from
 
 - **Runs every year on its own schedule:** the tracker opens one month before Thanksgiving and stays live through New Year's Day, then shows a countdown to the next opening. For 2026 that's Oct 26, 2026 to Jan 1, 2027; for 2027 it's Oct 25, 2027 to Jan 1, 2028. Every sale date is calculated for each year, so nothing needs re-dating.
 - **Deals near me:** tap *Use my location* (or type a city or ZIP) to see nearby stores with in-person deals running, sorted by distance, with directions. Store locations come live from OpenStreetMap, so it works anywhere in the US, not just Boston. Your location stays in your browser; only rough coordinates are sent to OpenStreetMap to look up stores.
+- **Live from deal sites:** a GitHub Action pulls the public deal feeds from Slickdeals and DealNews every 15 minutes in season. The page checks for new posts every minute and its timers tick every second, so you see fresh deals without reloading. When the same product shows up at the same price on more than one site, it's listed once with every link.
+- **Search finds anything:** search any product, even one with no tracked deal, and get direct links to its search results at Amazon, Walmart, Target, Best Buy, Costco, eBay, Newegg, B&H, Apple, Macy's, Kohl's, Nordstrom, Home Depot and REI. You also get price comparison links (Google Shopping, Slickdeals, camelcamelcamel) and a map of stores near you that carry it.
+- **Same price, every store:** a deal sold at the same price by several retailers lists them all (`offers` in `deals.js`).
 - **Covers the whole season:** Thanksgiving, Black Friday, Small Business Saturday, Cyber Monday, Giving Tuesday, Green Monday, Super Saturday, Christmas, after-Christmas sales and New Year's Day.
 - **Live countdown** to the next sale event, plus a sticky calendar strip that marks what's next.
 - **Live status badges:** each deal shows *Live*, *Ends in 2 days*, *Starts tomorrow* or *Ended*, worked out from its dates in your browser. Badges change on their own as days pass, with no rebuild needed.
@@ -38,10 +41,14 @@ turkey-to-toast/
 ├── index.html        # Page layout
 ├── assets/
 │   ├── deals.js      # Deals per season + store-brand map for "Deals near me" (edit this)
-│   ├── app.js        # Season schedule, filters, countdown, status badges, nearby stores
+│   ├── app.js        # Season schedule, filters, countdown, nearby stores, live feed, store search
+│   ├── live-feed.json # Written by the live-feed Action; don't edit by hand
 │   └── styles.css    # Styling, light and dark mode
 ├── .github/workflows/
+│   ├── live-feed.yml        # Refreshes live-feed.json every 15 min, Oct 1 to Jan 1
 │   └── season-reminder.yml  # Opens an issue every Oct 1 to add the new season's deals
+├── scripts/
+│   └── fetch_feeds.py       # Reads the deal-site RSS feeds (standard library only)
 └── README.md
 ```
 
@@ -102,6 +109,10 @@ python3 -m http.server 8000
 1. Push to `main`.
 2. In the repo, go to **Settings → Pages**.
 3. Set **Source** to *Deploy from a branch*, then choose `main` and `/ (root)`.
+
+## Why there's no store scraping or embedded API keys
+
+Amazon, Walmart and Target forbid automated scraping in their terms and block it. This repo only reads feeds that sites publish for that purpose. Store price APIs (Best Buy's is free) need a key in your name. A key must never be committed to a public repo, so if you add one, store it as a repository secret (**Settings → Secrets and variables → Actions**) and read it in a workflow.
 
 ## Credits
 

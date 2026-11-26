@@ -158,3 +158,30 @@ a { color: var(--cranberry); }
   .place-form { flex: 1; }
   .place-form input { flex: 1; width: auto; min-width: 0; }
 }
+
+/* Same price at several stores */
+.same { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; }
+.same-label { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; font-size: 11px; }
+.same-link { padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); text-decoration: none; color: var(--pine); font-weight: 600; }
+.same-link:hover { background: var(--pine); color: #fff; border-color: var(--pine); }
+
+/* Search every store */
+.everywhere { margin: 8px 0 4px; padding: 16px 18px; border-radius: var(--radius); background: var(--surface); border: 1px dashed color-mix(in srgb, var(--pine) 45%, var(--line)); }
+.everywhere h3 { font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 18px; margin: 0 0 10px; }
+.store-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.store-link { font-size: 13px; padding: 6px 12px; border-radius: 999px; background: var(--chip); color: var(--ink); text-decoration: none; }
+.store-link:hover { background: var(--pine); color: #fff; }
+.store-sub { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin: 14px 0 8px; }
+
+/* Live feed */
+.feed { margin: 8px 0 32px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.feed-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; }
+.feed h2 { font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 24px; margin: 0; }
+.feed-meta { font-size: 13px; color: var(--muted); margin: 0; font-variant-numeric: tabular-nums; }
+.feed-list { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 0; }
+.feed-item { padding: 10px 0; border-top: 1px solid var(--line); display: grid; gap: 4px; }
+.feed-title { color: var(--ink); text-decoration: none; font-weight: 500; }
+.feed-title:hover { color: var(--cranberry); text-decoration: underline; }
+.feed-sub { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); align-items: center; }
+.feed-time { color: var(--live); font-weight: 600; font-variant-numeric: tabular-nums; }
+.feed-empty { color: var(--muted); padding: 10px 0; border-top: 1px solid var(--line); }

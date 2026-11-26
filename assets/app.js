@@ -15,6 +15,31 @@
   var TZ = "America/New_York";
   var OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
   var params = new URLSearchParams(location.search);
+  var FEED_URLS = ["https://raw.githubusercontent.com/AravindB98/turkey-to-toast/main/assets/live-feed.json", "assets/live-feed.json"];
+
+  // Official store search pages, used when someone searches for anything.
+  var STORES = [
+    ["Amazon", "https://www.amazon.com/s?k="],
+    ["Walmart", "https://www.walmart.com/search?q="],
+    ["Target", "https://www.target.com/s?searchTerm="],
+    ["Best Buy", "https://www.bestbuy.com/site/searchpage.jsp?st="],
+    ["Costco", "https://www.costco.com/CatalogSearch?dept=All&keyword="],
+    ["eBay", "https://www.ebay.com/sch/i.html?_nkw="],
+    ["Newegg", "https://www.newegg.com/p/pl?d="],
+    ["B&H Photo", "https://www.bhphotovideo.com/c/search?q="],
+    ["Apple", "https://www.apple.com/us/search/", true],
+    ["Macy's", "https://www.macys.com/shop/search?keyword="],
+    ["Kohl's", "https://www.kohls.com/search.jsp?search="],
+    ["Nordstrom", "https://www.nordstrom.com/sr?keyword="],
+    ["Home Depot", "https://www.homedepot.com/s/", true],
+    ["REI", "https://www.rei.com/search?q="]
+  ];
+  var COMPARE = [
+    ["Google Shopping (every store's price)", "https://www.google.com/search?tbm=shop&q="],
+    ["Slickdeals", "https://slickdeals.net/newsearch.php?searcharea=deals&q="],
+    ["Amazon price history (camelcamelcamel)", "https://camelcamelcamel.com/search?sq="],
+    ["In stores near you (Google Maps)", "https://www.google.com/maps/search/", true, " store"]
+  ];
 
   /* ---------- Calendar math (all dates are "YYYY-MM-DD" strings in US Eastern) ---------- */
 
@@ -255,6 +280,16 @@
       if (d.student) tags.appendChild(el("span", "tag stu", "Student pick"));
       tags.appendChild(el("span", "tag", d.where === "boston" ? "Boston" : d.where === "both" ? "Online + in store" : "Online"));
       card.appendChild(tags);
+      if (d.offers && d.offers.length > 1) {
+        var same = el("div", "same");
+        same.appendChild(el("span", "same-label", "Same price at"));
+        d.offers.forEach(function (o) {
+          var oa = el("a", "same-link", o.store + " ↗");
+          oa.href = o.url; oa.target = "_blank"; oa.rel = "noopener noreferrer";
+          same.appendChild(oa);
+        });
+        card.appendChild(same);
+      }
       var a = dealLink(d, "go");
       a.appendChild(el("span", null, "View on " + (d.sourceLabel || host(d.url))));
       a.appendChild(el("span", null, "↗"));
@@ -262,7 +297,106 @@
       grid.appendChild(card);
     });
     $("count").textContent = list.length + " of " + deals.length + " deals shown";
-    $("empty").hidden = list.length > 0 || !deals.length;
+    $("empty").hidden = list.length > 0 || !deals.length || !!state.q;
+    renderEverywhere(list.length);
+    renderFeed();
+  }
+
+  /* ---------- Search every store ---------- */
+
+  function storeLink(name, base, pathStyle, suffix, q) {
+    var term = q + (suffix || "");
+    var a = el("a", "store-link", name + " ↗");
+    a.href = base + (pathStyle ? encodeURIComponent(term) : encodeURIComponent(term).replace(/%20/g, "+"));
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    return a;
+  }
+
+  function renderEverywhere(found) {
+    var box = $("everywhere");
+    box.textContent = "";
+    if (!state.q) { box.hidden = true; return; }
+    box.hidden = false;
+    var feedHits = feedMatches().length;
+    var head = el("h3", null, found || feedHits
+      ? "Check \u201c" + state.q + "\u201d at every store"
+      : "No tracked deal for \u201c" + state.q + "\u201d yet. Search it at every store:");
+    box.appendChild(head);
+    var row = el("div", "store-row");
+    STORES.forEach(function (s) { row.appendChild(storeLink(s[0], s[1], s[2], s[3], state.q)); });
+    box.appendChild(row);
+    box.appendChild(el("p", "store-sub", "Compare prices across sites"));
+    var row2 = el("div", "store-row");
+    COMPARE.forEach(function (s) { row2.appendChild(storeLink(s[0], s[1], s[2], s[3], state.q)); });
+    box.appendChild(row2);
+    if (feedHits) box.appendChild(el("p", "store-sub", feedHits + " matching live deal" + (feedHits > 1 ? "s" : "") + " in \u201cLive from deal sites\u201d below."));
+  }
+
+  /* ---------- Live feed from deal sites ---------- */
+
+  var feed = null, feedShown = 12;
+  function ago(iso) {
+    var s = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 1000));
+    if (s < 60) return s + "s ago";
+    if (s < 3600) return Math.floor(s / 60) + "m " + pad(s % 60) + "s ago";
+    if (s < 86400) return Math.floor(s / 3600) + "h " + pad(Math.floor(s / 60) % 60) + "m ago";
+    return Math.floor(s / 86400) + "d ago";
+  }
+  function feedMatches() {
+    if (!feed) return [];
+    if (!state.q) return feed.items;
+    var words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+    return feed.items.filter(function (it) {
+      var hay = (it.title + " " + it.category + " " + it.source).toLowerCase();
+      return words.every(function (w) { return hay.indexOf(w) >= 0; });
+    });
+  }
+  function renderFeed() {
+    var sec = $("feed");
+    if (!feed || archive || !season.open) { sec.hidden = true; return; }
+    sec.hidden = false;
+    var items = feedMatches(), list = $("feedList");
+    list.textContent = "";
+    items.slice(0, feedShown).forEach(function (it) {
+      var li = el("li", "feed-item");
+      var a = el("a", "feed-title", it.title);
+      a.href = it.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+      li.appendChild(a);
+      var m = el("div", "feed-sub");
+      m.appendChild(el("span", "feed-time", ago(it.published)));
+      m.dataset.ts = it.published;
+      if (it.category) m.appendChild(el("span", null, it.category));
+      if (it.offers && it.offers.length > 1) {
+        m.appendChild(el("span", "same-label", "Same price on"));
+        it.offers.forEach(function (o) { var oa = el("a", "same-link", o.source + " ↗"); oa.href = o.url; oa.target = "_blank"; oa.rel = "noopener noreferrer"; m.appendChild(oa); });
+      } else {
+        m.appendChild(el("span", "feed-src", "via " + it.source));
+      }
+      li.appendChild(m);
+      list.appendChild(li);
+    });
+    if (!items.length) list.appendChild(el("li", "feed-empty", "No live deal-site posts match \u201c" + state.q + "\u201d right now."));
+    $("feedMore").hidden = items.length <= feedShown;
+    tickFeed();
+  }
+  function tickFeed() {
+    if (!feed) return;
+    $("feedMeta").textContent = "Pulled from " + feed.sources.join(" and ") + " · refreshed " + ago(feed.updated) + " · checking for new posts every minute";
+    Array.prototype.forEach.call(document.querySelectorAll(".feed-sub"), function (m) {
+      m.firstChild.textContent = ago(m.dataset.ts);
+    });
+  }
+  function loadFeed(i) {
+    i = i || 0;
+    if (i >= FEED_URLS.length) return;
+    fetch(FEED_URLS[i] + "?t=" + Math.floor(Date.now() / 60000), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (data) {
+        if (!data || !data.items) throw new Error("bad feed");
+        if (!feed || data.updated !== feed.updated) { feed = data; render(); }
+      })
+      .catch(function () { loadFeed(i + 1); });
   }
 
   /* ---------- Deals near me ---------- */
@@ -422,7 +556,10 @@
   renderTimeline();
   renderClock();
   render();
-  setInterval(renderClock, 1000);
+  $("feedMore").addEventListener("click", function () { feedShown += 24; renderFeed(); });
+  loadFeed();
+  setInterval(function () { renderClock(); tickFeed(); }, 1000);
+  setInterval(loadFeed, 60000);
   // Re-check dates every 10 minutes so badges and the season flip without a reload.
   setInterval(function () {
     var t = todayET(now());

@@ -87,9 +87,19 @@
       <p class="count" id="count"></p>
     </section>
 
+    <section class="everywhere" id="everywhere" hidden aria-live="polite"></section>
     <section class="grid" id="grid" aria-label="Deals"></section>
-    <p class="empty" id="empty" hidden>No deals match those filters. Try clearing the search or turning off "Hide ended".</p>
+    <p class="empty" id="empty" hidden>No tracked deals match those filters. Try clearing the search or turning off "Hide ended".</p>
     </div>
+
+    <section class="feed" id="feed" aria-labelledby="feedTitle" hidden>
+      <div class="feed-top">
+        <h2 id="feedTitle">Live from deal sites</h2>
+        <p class="feed-meta" id="feedMeta"></p>
+      </div>
+      <ul class="feed-list" id="feedList"></ul>
+      <button type="button" class="btn ghost" id="feedMore" hidden>Show more</button>
+    </section>
   </main>
 
   <footer class="wrap foot">

@@ -14,6 +14,7 @@
 //   where     online | boston | both   ("both" deals show up in "Deals near me" at nearby stores)
 //   brands    optional list of store brand names to look for nearby; defaults to TT_STORE_BRANDS[store]
 //   place     optional fixed location for one-off venues: { name, lat, lng, address }
+//   offers    optional list of every store selling it at this same price: [{ store, url }]
 
 window.TT_META = {
   lastUpdated: "2026-11-26",
@@ -65,7 +66,7 @@ window.TT_SEASONS[2026] = [
   { title: "Razer Blade 14 (RTX 5070)", deal: "$1,699, was $2,699", store: "Razer", category: "laptops", season: ["thanksgiving", "cyber"], where: "online", start: null, end: null, url: "https://www.tomsguide.com/computing/gaming-laptops/i-test-gaming-laptops-for-a-living-and-these-are-the-best-early-black-friday-rtx-50-deals-i-recommend", sourceLabel: "Tom's Guide" },
 
   // Gaming
-  { title: "PS5 Pro console", deal: "$649, was $749 (lowest ever)", store: "Amazon, Walmart", category: "gaming", season: ["thanksgiving", "cyber"], where: "both", start: null, end: null, student: true, note: "Best way to play GTA 6, which is console only for now.", url: "https://www.techradar.com/gaming/ive-spent-hundreds-of-hours-testing-the-best-ps5-pro-games-and-now-that-the-console-has-dropped-to-a-lowest-ever-price-i-cant-recommend-it-enough-for-whats-to-come-in-2026", sourceLabel: "TechRadar" },
+  { title: "PS5 Pro console", deal: "$649, was $749 (lowest ever)", store: "Amazon, Walmart", offers: [{ store: "Amazon", url: "https://www.amazon.com/s?k=PS5+Pro" }, { store: "Walmart", url: "https://www.walmart.com/search?q=PS5+Pro" }], category: "gaming", season: ["thanksgiving", "cyber"], where: "both", start: null, end: null, student: true, note: "Best way to play GTA 6, which is console only for now.", url: "https://www.techradar.com/gaming/ive-spent-hundreds-of-hours-testing-the-best-ps5-pro-games-and-now-that-the-console-has-dropped-to-a-lowest-ever-price-i-cant-recommend-it-enough-for-whats-to-come-in-2026", sourceLabel: "TechRadar" },
   { title: "PS5 Slim Digital + GTA 6", deal: "Console $600, GTA 6 $80 ($100 Ultimate)", store: "Best Buy", category: "gaming", season: ["thanksgiving", "christmas"], where: "both", start: null, end: null, student: true, note: "Digital plays GTA 6 the same as the disc model.", url: "https://games.gg/news/best-buy-gta-6-console-bundle/", sourceLabel: "games.gg" },
   { title: "GTA 6 console bundles tracker", deal: "PS5 and Xbox bundles checked daily", store: "PC Guide", category: "gaming", season: ["thanksgiving", "cyber"], where: "online", start: null, end: "2026-11-30", url: "https://www.pcguide.com/deals/black-friday/gta-6/", sourceLabel: "PC Guide" },
   { title: "PlayStation Store sale", deal: "Up to 50% off digital games, add-ons and memberships", store: "PlayStation", category: "gaming", season: ["thanksgiving", "cyber"], where: "online", start: null, end: "2026-11-30", student: true, url: "https://store.playstation.com/" },
