@@ -14,7 +14,7 @@
 <body>
   <header class="hero">
     <div class="wrap">
-      <p class="eyebrow">Holiday deals tracker · Online + Boston</p>
+      <p class="eyebrow" id="eyebrow">Holiday deals tracker · Online + Boston</p>
       <h1>Turkey <span>to</span> Toast</h1>
       <p class="tagline">Every deal worth a click, from the Thanksgiving turkey to the New Year's toast. Picked for students, with Boston for in-person shopping.</p>
       <div class="countdown" id="countdown" aria-live="polite"></div>
@@ -26,6 +26,35 @@
   </nav>
 
   <main class="wrap">
+    <p class="season-note" id="seasonNote" hidden></p>
+
+    <section class="near" id="near" aria-labelledby="nearTitle" hidden>
+      <div class="near-top">
+        <div>
+          <h2 id="nearTitle">Deals near me</h2>
+          <p class="near-sub">Find stores around you that have in-person deals running today.</p>
+        </div>
+        <div class="near-actions">
+          <button type="button" class="btn" id="locate">Use my location</button>
+          <form id="placeForm" class="place-form">
+            <label class="sr" for="place">City or ZIP code</label>
+            <input id="place" type="search" placeholder="or a city / ZIP" autocomplete="postal-code">
+            <button type="submit" class="btn ghost">Go</button>
+          </form>
+          <label class="sort">Within
+            <select id="radius">
+              <option value="3">3 mi</option>
+              <option value="10" selected>10 mi</option>
+              <option value="25">25 mi</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <p class="near-status" id="nearStatus" aria-live="polite">Your location stays in your browser. Only rough coordinates are sent to OpenStreetMap to find stores.</p>
+      <ul class="near-list" id="nearList"></ul>
+    </section>
+
+    <div id="dealsArea">
     <section class="controls" aria-label="Filters">
       <label class="search">
         <span class="sr">Search deals</span>
@@ -60,10 +89,12 @@
 
     <section class="grid" id="grid" aria-label="Deals"></section>
     <p class="empty" id="empty" hidden>No deals match those filters. Try clearing the search or turning off "Hide ended".</p>
+    </div>
   </main>
 
   <footer class="wrap foot">
     <p>Last updated <span id="updated"></span>. Prices and dates come from retailers and deal sites and change fast, so check the store before you buy. Status badges update on their own as dates pass.</p>
+    <p>The tracker opens every year a month before Thanksgiving and runs through New Year's Day. Store locations © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>
     <p>Not affiliated with any retailer. No affiliate links. <a href="https://github.com/AravindB98/turkey-to-toast">Add a deal on GitHub</a>.</p>
   </footer>
 

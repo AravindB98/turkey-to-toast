@@ -1,29 +1,44 @@
 // Turkey to Toast deal data.
-// To add a deal, copy one object below, edit it, and commit. The site updates on the next GitHub Pages build.
-// Dates are YYYY-MM-DD (US Eastern). Leave start or end as null when the retailer has not published one.
-// category: tech | laptops | gaming | coats | student | storewide | boston | tickets
-// season: any of thanksgiving | cyber | christmas | newyear
-// where: online | boston | both
+//
+// The tracker runs every year from one month before Thanksgiving through New Year's Day.
+// Sale-day dates (Thanksgiving, Black Friday, Cyber Monday, Green Monday...) are worked out
+// automatically for each year, so you never edit them. You only add deals.
+//
+// Each season is keyed by the year its Thanksgiving falls in: TT_SEASONS[2026] runs
+// Oct 26, 2026 to Jan 1, 2027. To start a new season, add TT_SEASONS[2027] = [ ... ].
+//
+// Deal fields:
+//   dates     YYYY-MM-DD (US Eastern). Leave start or end as null when the retailer has not published one.
+//   category  tech | laptops | gaming | coats | student | storewide | boston | tickets
+//   season    any of thanksgiving | cyber | christmas | newyear
+//   where     online | boston | both   ("both" deals show up in "Deals near me" at nearby stores)
+//   brands    optional list of store brand names to look for nearby; defaults to TT_STORE_BRANDS[store]
+//   place     optional fixed location for one-off venues: { name, lat, lng, address }
 
 window.TT_META = {
-  lastUpdated: "2026-11-21",
+  lastUpdated: "2026-11-26",
   city: "Boston"
 };
 
-window.TT_EVENTS = [
-  { name: "Thanksgiving", date: "2026-11-26" },
-  { name: "Black Friday", date: "2026-11-27" },
-  { name: "Small Business Saturday", date: "2026-11-28" },
-  { name: "Cyber Monday", date: "2026-11-30" },
-  { name: "Giving Tuesday", date: "2026-12-01" },
-  { name: "Green Monday", date: "2026-12-14" },
-  { name: "Super Saturday", date: "2026-12-19" },
-  { name: "Christmas", date: "2026-12-25" },
-  { name: "After-Christmas sales", date: "2026-12-26" },
-  { name: "New Year's Day", date: "2027-01-01" }
-];
+// Store names on deals mapped to the brand names stores use on OpenStreetMap,
+// which "Deals near me" uses to find physical locations.
+window.TT_STORE_BRANDS = {
+  "Target": ["Target"],
+  "Walmart": ["Walmart"],
+  "Best Buy": ["Best Buy"],
+  "Nordstrom": ["Nordstrom"],
+  "Kohl's": ["Kohl's"],
+  "REI": ["REI"],
+  "The North Face": ["The North Face"],
+  "Columbia": ["Columbia"],
+  "T-Mobile": ["T-Mobile"],
+  "Amazon, Walmart": ["Walmart"],
+  "Multiple retailers": ["Best Buy", "Target", "Walmart"]
+};
 
-window.TT_DEALS = [
+window.TT_SEASONS = window.TT_SEASONS || {};
+
+window.TT_SEASONS[2026] = [
   // Store-wide sales
   { title: "Amazon Black Friday sale", deal: "Up to 60% off, new daily markdowns", store: "Amazon", category: "storewide", season: ["thanksgiving", "cyber"], where: "online", start: "2026-11-19", end: "2026-11-30", url: "https://www.amazon.com/" },
   { title: "Target Black Friday sale", deal: "Up to 50% off sitewide", store: "Target", category: "storewide", season: ["thanksgiving"], where: "both", start: "2026-11-22", end: "2026-11-29", url: "https://www.target.com/" },
@@ -68,7 +83,7 @@ window.TT_DEALS = [
   { title: "Walmart+ with Sam's Club Plus", deal: "Both memberships for $120/year", store: "Walmart", category: "student", season: ["thanksgiving"], where: "online", start: null, end: null, student: true, url: "https://www.walmart.com/plus" },
 
   // Boston in-person
-  { title: "Museum Store Sunday at the MFA", deal: "20% off socks, toys, mugs and more", store: "Museum of Fine Arts, Boston", category: "boston", season: ["thanksgiving"], where: "boston", start: "2026-11-29", end: "2026-11-29", student: true, url: "https://www.mfa.org/" },
+  { title: "Museum Store Sunday at the MFA", deal: "20% off socks, toys, mugs and more", store: "Museum of Fine Arts, Boston", category: "boston", season: ["thanksgiving"], where: "boston", start: "2026-11-29", end: "2026-11-29", student: true, url: "https://www.mfa.org/", place: { name: "Museum of Fine Arts, Boston", lat: 42.3394, lng: -71.0940, address: "465 Huntington Ave, Boston, MA" } },
   { title: "Boston Black Friday store tracker", deal: "Live store and product discount monitor", store: "Come To Boston", category: "boston", season: ["thanksgiving"], where: "boston", start: null, end: null, url: "https://www.cometoboston.com/" },
   { title: "Best Buy Store Pickup, Boston area", deal: "Order Doorbusters online, collect in store", store: "Best Buy", category: "boston", season: ["thanksgiving", "cyber"], where: "boston", start: null, end: null, url: "https://www.bestbuy.com/" },
 

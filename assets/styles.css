@@ -126,3 +126,35 @@ a { color: var(--cranberry); }
   .tagline { font-size: 16px; }
   .row { gap: 10px; }
 }
+
+/* Season note */
+.season-note { margin: 24px 0 0; padding: 14px 18px; border-radius: 12px; background: color-mix(in srgb, var(--gold) 14%, var(--surface)); border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent); font-size: 15px; }
+
+/* Deals near me */
+.near { margin-top: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.near-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; align-items: flex-end; }
+.near h2 { font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 24px; margin: 0; }
+.near-sub { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+.near-actions { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.btn { font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid var(--pine); background: var(--pine); color: #fff; padding: 9px 16px; border-radius: 10px; }
+.btn:hover { filter: brightness(1.1); }
+.btn.ghost { background: transparent; color: var(--pine); }
+.place-form { display: inline-flex; gap: 6px; }
+.place-form input { font: inherit; font-size: 14px; width: 150px; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.near-status { font-size: 13px; color: var(--muted); margin: 14px 0 0; }
+.near-status.err { color: var(--cranberry); }
+.near-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.near-item { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; background: var(--bg); }
+.near-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.near-head strong { display: block; }
+.near-addr { display: block; font-size: 13px; color: var(--muted); }
+.near-dist { font-weight: 600; color: var(--pine); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.near-deals { display: flex; flex-wrap: wrap; gap: 6px; }
+.near-deal { font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, var(--cranberry) 10%, transparent); color: var(--cranberry); }
+.near-deal:hover { background: var(--cranberry); color: #fff; }
+.near-dir { font-size: 13px; font-weight: 600; color: var(--pine); justify-self: start; }
+@media (max-width: 560px) {
+  .near-actions { width: 100%; }
+  .place-form { flex: 1; }
+  .place-form input { flex: 1; width: auto; min-width: 0; }
+}

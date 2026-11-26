@@ -8,6 +8,8 @@ Turkey to Toast collects the season's best deals in one place: online sales from
 
 ## What it does
 
+- **Runs every year on its own schedule:** the tracker opens one month before Thanksgiving and stays live through New Year's Day, then shows a countdown to the next opening. For 2026 that's Oct 26, 2026 to Jan 1, 2027; for 2027 it's Oct 25, 2027 to Jan 1, 2028. Every sale date is calculated for each year, so nothing needs re-dating.
+- **Deals near me:** tap *Use my location* (or type a city or ZIP) to see nearby stores with in-person deals running, sorted by distance, with directions. Store locations come live from OpenStreetMap, so it works anywhere in the US, not just Boston. Your location stays in your browser; only rough coordinates are sent to OpenStreetMap to look up stores.
 - **Covers the whole season:** Thanksgiving, Black Friday, Small Business Saturday, Cyber Monday, Giving Tuesday, Green Monday, Super Saturday, Christmas, after-Christmas sales and New Year's Day.
 - **Live countdown** to the next sale event, plus a sticky calendar strip that marks what's next.
 - **Live status badges:** each deal shows *Live*, *Ends in 2 days*, *Starts tomorrow* or *Ended*, worked out from its dates in your browser. Badges change on their own as days pass, with no rebuild needed.
@@ -35,15 +37,29 @@ Turkey to Toast collects the season's best deals in one place: online sales from
 turkey-to-toast/
 ├── index.html        # Page layout
 ├── assets/
-│   ├── deals.js      # All deal data and the event calendar (edit this to add deals)
-│   ├── app.js        # Filters, countdown, status badges
+│   ├── deals.js      # Deals per season + store-brand map for "Deals near me" (edit this)
+│   ├── app.js        # Season schedule, filters, countdown, status badges, nearby stores
 │   └── styles.css    # Styling, light and dark mode
+├── .github/workflows/
+│   └── season-reminder.yml  # Opens an issue every Oct 1 to add the new season's deals
 └── README.md
 ```
 
+## Starting a new season each year
+
+Each season is keyed by the year its Thanksgiving falls in. On October 1 a GitHub Action opens an issue reminding you to add the new season. To start it, add a block to `assets/deals.js`:
+
+```js
+window.TT_SEASONS[2027] = [
+  // deals for Oct 25, 2027 to Jan 1, 2028
+];
+```
+
+If the season opens before you add deals, the site says deals are on the way. Last season stays browsable at `?season=2026`.
+
 ## Add or update a deal
 
-Every deal lives in `assets/deals.js`. Copy an entry, edit it and commit:
+Copy an entry inside the current season's list, edit it and commit:
 
 ```js
 {
@@ -58,9 +74,17 @@ Every deal lives in `assets/deals.js`. Copy an entry, edit it and commit:
   student: true,                    // shows the Student pick tag
   url: "https://www.bestbuy.com/",  // where the card's button goes
   sourceLabel: "Best Buy",          // optional; defaults to the link's domain
-  note: "Optional one-line tip"
+  note: "Optional one-line tip",
+  brands: ["Best Buy"],             // optional; store brands to find nearby (defaults to TT_STORE_BRANDS[store])
+  place: { name, lat, lng, address } // optional; fixed venue such as a museum
 }
 ```
+
+Deals with `where: "both"` or `"boston"` show up in *Deals near me* whenever their store is in `TT_STORE_BRANDS`. Add new store names there.
+
+## Preview any date
+
+Append `?date=YYYY-MM-DD` to the URL to see the site as it will look on that day, for example `?date=2027-03-10` for the off-season page.
 
 Then change `lastUpdated` at the top of the file. GitHub Pages republishes the site within a minute or two.
 
@@ -78,6 +102,10 @@ python3 -m http.server 8000
 1. Push to `main`.
 2. In the repo, go to **Settings → Pages**.
 3. Set **Source** to *Deploy from a branch*, then choose `main` and `/ (root)`.
+
+## Credits
+
+Store locations © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via the Overpass API. Place search by Nominatim.
 
 ## Disclaimer
 

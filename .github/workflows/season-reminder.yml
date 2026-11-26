@@ -1,0 +1,40 @@
+# Opens an issue each October 1 reminding you to add deals for the coming season,
+# which opens one month before Thanksgiving and runs through New Year's Day.
+name: Season reminder
+
+on:
+  schedule:
+    - cron: "0 14 1 10 *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const y = new Date().getUTCFullYear();
+            const nov1 = new Date(Date.UTC(y, 10, 1)).getUTCDay();
+            const tday = 1 + ((4 - nov1 + 7) % 7) + 21;
+            const opens = `Oct ${tday}, ${y}`;
+            const title = `Add deals for the ${y} season (opens ${opens})`;
+            const existing = await github.rest.issues.listForRepo({ owner: context.repo.owner, repo: context.repo.repo, state: "open" });
+            if (existing.data.some(i => i.title === title)) return;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body: [
+                `The tracker reopens on **${opens}** (one month before Thanksgiving on Nov ${tday}) and runs through Jan 1, ${y + 1}.`,
+                "",
+                `- [ ] Add \`window.TT_SEASONS[${y}] = [ ... ]\` to \`assets/deals.js\``,
+                "- [ ] Update `lastUpdated` in `TT_META`",
+                "- [ ] Check `TT_STORE_BRANDS` covers every in-person store",
+                "",
+                "Sale-day dates are calculated automatically, so nothing else needs changing."
+              ].join("\n")
+            });
