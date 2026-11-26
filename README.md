@@ -80,13 +80,13 @@ Copy an entry inside the current season's list, edit it and commit:
 }
 ```
 
+Then change `lastUpdated` at the top of the file. GitHub Pages republishes the site within a minute or two.
+
 Deals with `where: "both"` or `"boston"` show up in *Deals near me* whenever their store is in `TT_STORE_BRANDS`. Add new store names there.
 
 ## Preview any date
 
 Append `?date=YYYY-MM-DD` to the URL to see the site as it will look on that day, for example `?date=2027-03-10` for the off-season page.
-
-Then change `lastUpdated` at the top of the file. GitHub Pages republishes the site within a minute or two.
 
 ## Run it locally
 
